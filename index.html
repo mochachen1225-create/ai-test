@@ -3,23 +3,30 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>京都翻譯測試</title>
 <input id="t" maxlength="50" placeholder="輸入真心話" style="font-size:18px;width:80%">
-<button onclick="go()" style="font-size:18px">翻譯</button>
-<p id="r"></p>
+<button id="b" style="font-size:18px">翻譯</button>
+<p id="r">（還沒開始）</p>
 <script>
 const WORKER = "https://testing.mochachen1225.workers.dev";
-async function go() {
+document.getElementById("b").addEventListener("click", async () => {
   const r = document.getElementById("r");
-    r.textContent = "狀態 " + res.status + "：" + JSON.stringify(data);
+  r.textContent = "翻譯中…";
   try {
     const res = await fetch(WORKER, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text: document.getElementById("t").value })
     });
-    const data = await res.json();
-    r.textContent = data.reply || data.error;
+    const raw = await res.text();
+    let data = {};
+    try { data = JSON.parse(raw); } catch {}
+    if (data.reply) {
+      r.textContent = data.reply.replaceAll("**", "");
+    } else {
+      r.textContent = "狀態 " + res.status + "，原始內容：" + raw;
+    }
   } catch (e) {
     r.textContent = "連不上櫃檯：" + e.message;
   }
-}
+});
 </script>
+<style>#r{white-space:pre-wrap;font-size:18px}</style>
