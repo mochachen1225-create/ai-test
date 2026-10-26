@@ -1,0 +1,21 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>京都翻譯測試</title>
+<input id="t" maxlength="50" placeholder="輸入真心話" style="font-size:18px;width:80%">
+<button onclick="go()" style="font-size:18px">翻譯</button>
+<p id="r"></p>
+<script>
+const WORKER = "https://xxx.你的帳號.workers.dev"; // 換成你的 Worker 網址
+async function go() {
+  const r = document.getElementById("r");
+  r.textContent = "翻譯中…";
+  const res = await fetch(WORKER, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text: document.getElementById("t").value })
+  });
+  const data = await res.json();
+  r.textContent = data.reply || data.error;
+}
+</script>
