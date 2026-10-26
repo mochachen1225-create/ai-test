@@ -6,16 +6,20 @@
 <button onclick="go()" style="font-size:18px">翻譯</button>
 <p id="r"></p>
 <script>
-const WORKER = "https://xxx.你的帳號.workers.dev"; // 換成你的 Worker 網址
+const WORKER = "https://testing.mochachen1225.workers.dev";
 async function go() {
   const r = document.getElementById("r");
   r.textContent = "翻譯中…";
-  const res = await fetch(WORKER, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text: document.getElementById("t").value })
-  });
-  const data = await res.json();
-  r.textContent = data.reply || data.error;
+  try {
+    const res = await fetch(WORKER, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: document.getElementById("t").value })
+    });
+    const data = await res.json();
+    r.textContent = data.reply || data.error;
+  } catch (e) {
+    r.textContent = "連不上櫃檯：" + e.message;
+  }
 }
 </script>
