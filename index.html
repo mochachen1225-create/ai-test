@@ -9,7 +9,7 @@
 const WORKER = "https://testing.mochachen1225.workers.dev";
 async function go() {
   const r = document.getElementById("r");
-  r.textContent = "翻譯中…";
+    r.textContent = "狀態 " + res.status + "：" + JSON.stringify(data);
   try {
     const res = await fetch(WORKER, {
       method: "POST",
